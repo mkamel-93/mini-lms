@@ -44,38 +44,53 @@ new class extends Component {
 
     <flux:heading class="sr-only">{{ __('Password Settings') }}</flux:heading>
 
-    <x-pages::settings.layout :heading="__('Update password')" :subheading="__('Ensure your account is using a long, random password to stay secure')">
-        <form method="POST" wire:submit="updatePassword" class="mt-6 space-y-6">
+    <x-pages::settings.layout
+        :heading="__('Update password')"
+        :subheading="__('Ensure your account is using a long, random password to stay secure')"
+    >
+        <form
+            class="mt-6 space-y-6"
+            method="POST"
+            wire:submit="updatePassword"
+        >
             <flux:input
+                type="password"
                 wire:model="current_password"
                 :label="__('Current password')"
-                type="password"
                 required
                 autocomplete="current-password"
             />
             <flux:input
+                type="password"
                 wire:model="password"
                 :label="__('New password')"
-                type="password"
                 required
                 autocomplete="new-password"
             />
             <flux:input
+                type="password"
                 wire:model="password_confirmation"
                 :label="__('Confirm Password')"
-                type="password"
                 required
                 autocomplete="new-password"
             />
 
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-end">
-                    <flux:button variant="primary" type="submit" class="w-full" data-test="update-password-button">
+                    <flux:button
+                        class="w-full"
+                        data-test="update-password-button"
+                        type="submit"
+                        variant="primary"
+                    >
                         {{ __('Save') }}
                     </flux:button>
                 </div>
 
-                <x-action-message class="me-3" on="password-updated">
+                <x-action-message
+                    class="me-3"
+                    on="password-updated"
+                >
                     {{ __('Saved.') }}
                 </x-action-message>
             </div>

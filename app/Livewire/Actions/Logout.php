@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Actions;
 
 use Illuminate\Support\Facades\Auth;
@@ -10,13 +12,13 @@ class Logout
     /**
      * Log the current user out of the application.
      */
-    public function __invoke()
+    public function __invoke(): \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
     {
         Auth::guard('web')->logout();
 
         Session::invalidate();
         Session::regenerateToken();
 
-        return redirect('/');
+        return redirect(route('login'));
     }
 }

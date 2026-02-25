@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Auth;
 
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Laravel\Fortify\Features;
 use Tests\TestCase;
+use App\Models\User;
+use Laravel\Fortify\Features;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class TwoFactorChallengeTest extends TestCase
 {
@@ -37,7 +39,7 @@ class TwoFactorChallengeTest extends TestCase
 
         $this->post(route('login.store'), [
             'email' => $user->email,
-            'password' => 'password',
+            'password' => config('auth.default_password'),
         ])->assertRedirect(route('two-factor.login'));
     }
 }
