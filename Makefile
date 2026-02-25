@@ -1,0 +1,76 @@
+# Define the path to your docker-compose file
+COMPOSE_FILE = .docker/docker-compose.yml
+DOCKER_ENV   = .docker/.env.docker
+ROOT_LINK    = docker-compose.yml
+ROOT_ENV     = .env
+
+COMPOSE_CMD = /usr/bin/docker compose -f $(COMPOSE_FILE) --env-file $(ROOT_ENV) --project-directory .
+
+.PHONY: link-compose init-env sync-env destroy build rebuild-container build-project up down restart conf ps php-bash web-bash database-bash database-import database-import logs logs-watch log-php test test-pint test-phpstan test-phpunit-coverage
+
+# make symlink to docker-compose into the root project .
+link-compose:
+	@if [ ! -L $(ROOT_LINK) ]; then \
+		echo "Creating symbolic link for docker-compose.yml..."; \
+		ln -s $(COMPOSE_FILE) $(ROOT_LINK); \
+	fi
+
+# create .env if not exists
+init-env:
+	@if [ ! -f $(ROOT_ENV) ]; then \
+		echo "Creating $(ROOT_ENV) from .env.example..."; \
+		cp .env.example $(ROOT_ENV); \
+	fi
+
+# SYNC: This runs whenever .env.docker changes
+sync-env: init-env
+	@echo "Updating Docker section in root .env..."
+	@# Delete old data between markers in root .env
+	@sed -i '/# Start Docker Configuration/,/# End Docker Configuration/{//!d}' $(ROOT_ENV)
+	@# Read and insert variables from .env.docker
+	@sed -i '/# Start Docker Configuration/r $(DOCKER_ENV)' $(ROOT_ENV)
+
+destroy: sync-env
+	$(COMPOSE_CMD) down --rmi all --volumes --remove-orphans
+build: sync-env
+	$(COMPOSE_CMD) build --build-arg USER_ID=$(shell id -u) --build-arg GROUP_ID=$(shell id -g)
+	$(COMPOSE_CMD) up -d --build
+
+rebuild-container:
+	@make destroy
+	@make build
+
+build-project: sync-env
+	$(COMPOSE_CMD) exec --user www-data php bash -c 'COMPOSER=composer.script.json composer run-script reset:backend'
+	$(COMPOSE_CMD) exec --user www-data php bash -c 'COMPOSER=composer.script.json composer run-script reset:data'
+	$(COMPOSE_CMD) exec --user nginx web bash -c 'rm -rf node_modules && npm i && npm run build'
+
+up: sync-env
+	$(COMPOSE_CMD) up -d
+down: sync-env
+	$(COMPOSE_CMD) down --remove-orphans
+
+restart: sync-env
+	@make down
+	@make up
+
+conf: sync-env
+	$(COMPOSE_CMD) config
+
+ps: sync-env
+	docker ps --format "table {{.Image}}\t{{.Ports}}"
+php-bash: sync-env
+	$(COMPOSE_CMD) exec --user www-data php bash
+web-bash: sync-env
+	$(COMPOSE_CMD) exec --user nginx web bash
+database-bash: sync-env
+	$(COMPOSE_CMD) exec database bash -c 'mysql -u$$MYSQL_USER -p$$MYSQL_PASSWORD'
+database-import: sync-env
+	$(COMPOSE_CMD) exec -T database bash -c 'mysql -u$$MYSQL_USER -p$$MYSQL_PASSWORD $$MYSQL_DATABASE' < dump.sql
+
+logs: sync-env
+	$(COMPOSE_CMD) logs
+logs-watch: sync-env
+	$(COMPOSE_CMD) logs --follow
+log-php: sync-env
+	$(COMPOSE_CMD) logs php
