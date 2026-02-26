@@ -6,7 +6,10 @@ ROOT_ENV     = .env
 
 COMPOSE_CMD = /usr/bin/docker compose -f $(COMPOSE_FILE) --env-file $(ROOT_ENV) --project-directory .
 
-.PHONY: link-compose init-env sync-env destroy build rebuild-container build-project up down restart conf ps php-bash web-bash database-bash database-import database-import logs logs-watch log-php test test-pint test-phpstan test-phpunit-coverage
+.PHONY: link-compose init-env sync-env destroy build rebuild-container build-project \
+        up down restart conf ps php-bash web-bash database-bash database-import \
+        logs logs-watch log-php test test-pint test-phpstan \
+        test-phpunit-coverage reset-ide-helper reset-data fix-pint-and-blade
 
 # make symlink to docker-compose into the root project .
 link-compose:
@@ -74,3 +77,25 @@ logs-watch: sync-env
 	$(COMPOSE_CMD) logs --follow
 log-php: sync-env
 	$(COMPOSE_CMD) logs php
+
+reset-ide-helper: sync-env
+	$(COMPOSE_CMD) exec -T --user www-data php sh -c 'COMPOSER=composer.script.json composer run-script reset:ide-helper'
+
+reset-data: sync-env
+	$(COMPOSE_CMD) exec -T --user www-data php sh -c 'COMPOSER=composer.script.json composer run-script reset:data'
+
+fix-pint-and-blade: sync-env
+	$(COMPOSE_CMD) exec -T --user www-data php sh -c 'COMPOSER=composer.script.json composer run-script fix:pint'
+	$(COMPOSE_CMD) exec -T --user nginx web sh -c 'npm run fix:blade'
+
+test: sync-env
+	$(COMPOSE_CMD) exec -T --user www-data php sh -c 'COMPOSER=composer.script.json composer run-script full:test'
+
+test-pint: sync-env
+	$(COMPOSE_CMD) exec -T --user www-data php sh -c 'set -e; COMPOSER=composer.script.json composer run-script test:pint'
+
+test-phpstan: sync-env
+	$(COMPOSE_CMD) exec -T --user www-data php sh -c 'COMPOSER=composer.script.json composer run-script test:phpstan'
+
+test-phpunit-coverage: sync-env
+	$(COMPOSE_CMD) exec -T --user www-data php sh -c 'COMPOSER=composer.script.json composer run-script test:phpunit-coverage'
