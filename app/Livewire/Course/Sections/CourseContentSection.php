@@ -16,6 +16,8 @@ class CourseContentSection extends BaseComponent
     #[Reactive]
     public ?Course $course = null;
 
+    protected ?bool $isEnrolled = null;
+
     public function triggerEnroll(): void
     {
         $this->dispatch('trigger-enroll');
@@ -37,7 +39,6 @@ class CourseContentSection extends BaseComponent
         }
 
         $user = auth()->user();
-        $isEnrolled = app(EnrollmentService::class)->isEnrolled($this->course);
 
         // If it's a free preview, allow direct navigation regardless of auth status
         if ($lesson->is_preview) {
@@ -57,7 +58,7 @@ class CourseContentSection extends BaseComponent
         }
 
         // If enrolled, allow direct navigation
-        if ($isEnrolled) {
+        if ($this->isEnrolled) {
             return [
                 'label' => __('Continue Lesson'),
                 'url' => route('courses.lessons.show', [$this->course->slug, $lesson->id]),
@@ -75,6 +76,10 @@ class CourseContentSection extends BaseComponent
 
     public function render(): View
     {
+        if ($this->course !== null && $this->isEnrolled === null) {
+            $this->isEnrolled = app(EnrollmentService::class)->isEnrolled($this->course);
+        }
+
         return view('livewire.course.sections.course-content-section');
     }
 }

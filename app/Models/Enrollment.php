@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Database\Factories\EnrollmentFactory;
+use App\Notifications\CourseEnrolledNotification;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -41,7 +43,9 @@ class Enrollment extends BaseModel
         parent::boot();
 
         static::created(function (Enrollment $enrollment): void {
-            $enrollment->user->notify(new \App\Notifications\CourseEnrolledNotification($enrollment));
+            DB::afterCommit(function () use ($enrollment): void {
+                $enrollment->user->notify(new CourseEnrolledNotification($enrollment));
+            });
         });
     }
 

@@ -154,11 +154,11 @@ class EnrollmentServiceTest extends TestCase
 
         $initialEnrollmentCount = Enrollment::count();
 
-        try {
-            $this->service->enroll($course);
-        } catch (InvalidArgumentException $e) {
-            // Expected exception
-        }
+        // Expect exception to be thrown
+        $this->expectException(InvalidArgumentException::class);
+
+        // This should throw an exception and rollback transaction
+        $this->service->enroll($course);
 
         // Ensure no enrollment was created due to transaction rollback
         $this->assertEquals($initialEnrollmentCount, Enrollment::count());

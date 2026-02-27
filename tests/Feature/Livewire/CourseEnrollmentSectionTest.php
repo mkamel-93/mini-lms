@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Course;
 use Livewire\Livewire;
 use App\Enums\StatusEnum;
+use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Livewire\Course\Sections\CourseEnrollmentSection;
@@ -158,7 +159,12 @@ class CourseEnrollmentSectionTest extends TestCase
         // Enroll again
         $course->students()->attach($user->id);
 
-        // Second immediate unenrollment should be throttled (no event dispatched)
-        $component->call('unenroll')->assertOk();
+        // Second immediate unenrollment should be throttled - no event dispatched
+        $component->call('unenroll')->assertNotDispatched('unenrolled');
+
+        $this->assertDatabaseHas('enrollments', [
+            'user_id' => $user->id,
+            'course_id' => $course->id,
+        ]);
     }
 }
