@@ -7,7 +7,7 @@
         @if ($lesson->video_url)
             <video
                 id="video-player"
-                data-poster="{{ asset('images/video-placeholder.jpg') }}"
+                data-poster="{{ Vite::Image('video-placeholder.jpg') }}"
                 controls
                 crossorigin
                 playsinline
@@ -16,17 +16,6 @@
                     src="{{ $lesson->video_url }}"
                     type="video/mp4"
                 />
-
-                <!-- Captions support -->
-                @if ($lesson->captions)
-                    <track
-                        srclang="en"
-                        src="{{ $lesson->captions }}"
-                        kind="captions"
-                        label="English"
-                    />
-                @endif
-
                 Your browser does not support the video tag.
             </video>
         @else

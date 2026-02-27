@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit;
+namespace Tests\Unit\Policies;
 
 use Tests\TestCase;
 use App\Models\User;
@@ -82,16 +82,6 @@ class CoursePolicyTest extends TestCase
     }
 
     #[Test]
-    public function it_denies_guest_from_unenrolling_from_course(): void
-    {
-        $course = Course::factory()->create();
-
-        $result = $this->policy->unenroll(null, $course);
-
-        $this->assertFalse($result);
-    }
-
-    #[Test]
     public function it_allows_enrolled_user_to_unenroll_from_course(): void
     {
         $user = User::factory()->create();
@@ -112,6 +102,16 @@ class CoursePolicyTest extends TestCase
         $course = Course::factory()->create();
 
         $result = $this->policy->unenroll($user, $course);
+
+        $this->assertFalse($result);
+    }
+
+    #[Test]
+    public function it_denies_guest_from_unenrolling_from_course(): void
+    {
+        $course = Course::factory()->create();
+
+        $result = $this->policy->unenroll(null, $course);
 
         $this->assertFalse($result);
     }

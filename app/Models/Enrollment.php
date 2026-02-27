@@ -34,6 +34,18 @@ class Enrollment extends BaseModel
     ];
 
     /**
+     * Bootstrap the model and its traits.
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::created(function (Enrollment $enrollment): void {
+            $enrollment->user->notify(new \App\Notifications\CourseEnrolledNotification($enrollment));
+        });
+    }
+
+    /**
      * Get the user that owns the enrollment.
      *
      * @return BelongsTo<User, $this>
@@ -51,17 +63,5 @@ class Enrollment extends BaseModel
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
-    }
-
-    /**
-     * Bootstrap the model and its traits.
-     */
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        static::created(function (Enrollment $enrollment): void {
-            $enrollment->user->notify(new \App\Notifications\CourseEnrolledNotification($enrollment));
-        });
     }
 }

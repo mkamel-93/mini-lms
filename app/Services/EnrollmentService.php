@@ -39,7 +39,11 @@ class EnrollmentService
 
             $enrollment = Enrollment::where('user_id', $user->id)
                 ->where('course_id', $course->id)
-                ->firstOrFail();
+                ->first();
+
+            if ($enrollment === null) {
+                return false;
+            }
 
             return $enrollment->delete();
         }) ?? false;

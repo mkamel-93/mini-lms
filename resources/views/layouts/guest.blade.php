@@ -155,6 +155,7 @@
                         class="text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
                         href="https://www.linkedin.com/in/mostafakamel-93/"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >
                         {{ __('Linked-in') }}
                     </a>
@@ -163,6 +164,7 @@
                         class="text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
                         href="https://github.com/mkamel-93/mini-lms"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >
                         {{ __('Repository') }}
                     </a>
@@ -171,6 +173,7 @@
                         class="text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
                         href="https://drive.google.com/drive/folders/1ABaBT5Fo2ulw_01Yvjfuk4H8mHHQVqid?usp=sharing"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >
                         {{ __('Docs') }}
                     </a>

@@ -61,14 +61,16 @@
                 href="https://www.linkedin.com/in/mostafakamel-93/"
                 icon="folder-git-2"
                 target="_blank"
+                rel="noopener noreferrer"
             >
-                {{ __('Linked-in') }}
+                {{ __('LinkedIn') }}
             </flux:sidebar.item>
 
             <flux:sidebar.item
                 href="https://github.com/mkamel-93/mini-lms"
                 icon="folder-git-2"
                 target="_blank"
+                rel="noopener noreferrer"
             >
                 {{ __('Repository') }}
             </flux:sidebar.item>
@@ -77,6 +79,7 @@
                 href="https://drive.google.com/drive/folders/1ABaBT5Fo2ulw_01Yvjfuk4H8mHHQVqid?usp=sharing"
                 icon="book-open-text"
                 target="_blank"
+                rel="noopener noreferrer"
             >
                 {{ __('Docs') }}
             </flux:sidebar.item>

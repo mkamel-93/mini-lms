@@ -4,40 +4,45 @@ declare(strict_types=1);
 
 namespace App\Livewire\Course\Sections;
 
+use Exception;
 use App\Models\Course;
 use Illuminate\View\View;
 use App\Core\BaseComponent;
-use Livewire\Attributes\Locked;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Reactive;
 use App\Services\EnrollmentService;
 
 class CourseEnrollmentSection extends BaseComponent
 {
-    #[Locked]
     #[Reactive]
     public ?Course $course = null;
 
-    public function mount(Course $course): void
-    {
-        $this->course = $course;
-    }
-
+    #[On('trigger-enroll')]
     public function enroll(EnrollmentService $service): void
     {
         if ($this->course === null) {
+            $this->dispatch('enrollment-failed');
+
             return;
         }
 
         if ($this->isThrottled(action: "enroll-{$this->course->id}")) {
+            $this->dispatch('enrollment-failed');
+
             return;
         }
 
-        $this->authorize('enroll', $this->course);
+        try {
+            $this->authorize('enroll', $this->course);
 
-        $service->enroll($this->course);
+            $service->enroll($this->course);
 
-        $this->dispatch('enrolled');
+            $this->dispatch('enrolled');
+        } catch (Exception $e) {
+            $this->dispatch('enrollment-failed');
+            logger()->error($e->getMessage());
+        }
     }
 
     public function unenroll(EnrollmentService $service): void
@@ -49,12 +54,16 @@ class CourseEnrollmentSection extends BaseComponent
         if ($this->isThrottled(action: "unenroll-{$this->course->id}")) {
             return;
         }
+        try {
+            $this->authorize('unenroll', $this->course);
 
-        $this->authorize('unenroll', $this->course);
+            $service->unenroll($this->course);
 
-        $service->unenroll($this->course);
-
-        $this->dispatch('unenrolled');
+            $this->dispatch('unenrolled');
+        } catch (Exception $e) {
+            $this->dispatch('enrollment-failed');
+            logger()->error($e->getMessage());
+        }
     }
 
     #[Computed]
@@ -64,7 +73,6 @@ class CourseEnrollmentSection extends BaseComponent
             return false;
         }
 
-        // 3. For Computed properties, use app() resolve or injection
         return app(EnrollmentService::class)->isEnrolled($this->course);
     }
 

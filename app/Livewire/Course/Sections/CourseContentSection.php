@@ -8,47 +8,68 @@ use App\Models\Course;
 use App\Models\Lesson;
 use Illuminate\View\View;
 use App\Core\BaseComponent;
-use Livewire\Attributes\Locked;
 use Livewire\Attributes\Reactive;
 use App\Services\EnrollmentService;
 
 class CourseContentSection extends BaseComponent
 {
-    #[Locked]
     #[Reactive]
     public ?Course $course = null;
 
-    public function mount(Course $course): void
+    public function triggerEnroll(): void
     {
-        $this->course = $course;
+        $this->dispatch('trigger-enroll');
     }
 
     /**
-     * @return array{url: string, label: string}
+     * Get the label and URL for a specific lesson button.
+     *
+     * @return array{label: string, url: string, is_enroll_action: bool}
      */
-    public function getLessonActionData(Lesson $lesson): array
+    public function getLessonAction(Lesson $lesson): array
     {
         if ($this->course === null) {
             return [
                 'url' => '#',
                 'label' => '-',
+                'is_enroll_action' => false,
             ];
         }
 
-        $loggedUser = auth()->check();
-        $canStart = $loggedUser || $lesson->is_preview;
+        $user = auth()->user();
+        $isEnrolled = app(EnrollmentService::class)->isEnrolled($this->course);
 
-        $label = match (true) {
-            ! $canStart => __('Login to Start'),
-            $lesson->is_preview || (app(EnrollmentService::class)->isEnrolled($this->course)) => __('Start'),
-            default => __('Enroll To Watch'),
-        };
+        // If it's a free preview, allow direct navigation regardless of auth status
+        if ($lesson->is_preview) {
+            return [
+                'label' => __('Preview'),
+                'url' => route('courses.lessons.show', [$this->course->slug, $lesson->id]),
+                'is_enroll_action' => false,
+            ];
+        }
 
+        if (! $user) {
+            return [
+                'label' => __('Login to Start'),
+                'url' => route('login'),
+                'is_enroll_action' => false,
+            ];
+        }
+
+        // If enrolled, allow direct navigation
+        if ($isEnrolled) {
+            return [
+                'label' => __('Continue Lesson'),
+                'url' => route('courses.lessons.show', [$this->course->slug, $lesson->id]),
+                'is_enroll_action' => false,
+            ];
+        }
+
+        // Logged in but not enrolled: Trigger enrollment action instead of navigation
         return [
-            'url' => $canStart
-                ? route('courses.lessons.show', [$this->course->slug, $lesson->id])
-                : route('login'),
-            'label' => $label,
+            'label' => __('Enroll to Start'),
+            'url' => '#',
+            'is_enroll_action' => true,
         ];
     }
 

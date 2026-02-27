@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignIdFor(Course::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
 
-            $table->unique(['user_id', 'course_id']);
+            $table->unique(['user_id', 'course_id'], 'enrollments_user_course_unique');
         });
     }
 

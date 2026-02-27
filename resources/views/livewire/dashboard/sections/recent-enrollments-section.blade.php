@@ -19,7 +19,8 @@
                 @foreach ($this->data as $enrollment)
                     <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                         <div class="flex-1">
-                            <h3 class="font-medium text-gray-900 dark:text-white">{{ $enrollment->course->title }}</h3>
+                            <h3 class="font-medium text-gray-900 dark:text-white">
+                                {{ $enrollment->course?->title ?? __('Course unavailable') }}</h3>
                             <p class="text-sm text-gray-600 dark:text-gray-400">Enrolled on
                                 {{ $enrollment->created_at->format('M d, Y') }}</p>
                         </div>

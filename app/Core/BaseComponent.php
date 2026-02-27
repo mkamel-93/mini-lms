@@ -12,7 +12,7 @@ class BaseComponent extends Component
     /**
      * Common rate limiting logic for all components.
      *
-     * * @param string $action The name of the action (e.g., 'enroll')
+     * @param  string  $action  The name of the action (e.g., 'enroll')
      * @param  int  $maxAttempts  Number of allowed attempts
      * @param  int  $decaySeconds  Time to wait before reset (default 60)
      * @return bool Returns true if the user is rate limited
@@ -28,10 +28,9 @@ class BaseComponent extends Component
         );
 
         if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
-            logger($key);
             $seconds = RateLimiter::availableIn($key);
 
-            session()->flash('error', "Too manymanymany attempts. Please wait {$seconds}s.");
+            session()->flash('error', "Too many attempts. Please wait {$seconds}s.");
 
             return true;
         }

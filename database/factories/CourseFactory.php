@@ -26,6 +26,7 @@ class CourseFactory extends BaseFactory
         return [
             'title' => $title,
             'slug' => Str::slug($title),
+            'description' => $this->faker->paragraph(),
             'status' => fake()->randomElement(StatusEnum::cases()),
             'level' => $this->faker->randomElement(CourseLevelEnum::cases()),
         ];

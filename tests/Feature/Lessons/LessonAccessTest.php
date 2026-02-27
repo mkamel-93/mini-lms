@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature;
+namespace Tests\Feature\Lessons;
 
 use Tests\TestCase;
 use App\Models\User;
@@ -11,7 +11,7 @@ use App\Models\Lesson;
 use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class LessonPolicyTest extends TestCase
+class LessonAccessTest extends TestCase
 {
     use RefreshDatabase;
 

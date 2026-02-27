@@ -1,6 +1,8 @@
 import Plyr from 'plyr';
 import 'plyr/dist/plyr.css';
+import plyrSprite from '@/images/plyr.svg?url';
 import collapse from '@alpinejs/collapse';
+
 
 // 1. Register Alpine plugins (Livewire 3 handles the start)
 document.addEventListener('alpine:init', () => {
@@ -16,7 +18,7 @@ const initPlyr = () => {
         const instance = new Plyr(player, {
             controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'],
             quality: { default: 720, options: [1080, 720, 480, 360] },
-            iconUrl: 'https://cdn.plyr.io/3.7.8/plyr.svg'
+            iconUrl: plyrSprite
         });
 
         // This is the critical part to fix the screenshots

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature;
+namespace Tests\Feature\Dashboard;
 
 use Tests\TestCase;
 use App\Models\User;

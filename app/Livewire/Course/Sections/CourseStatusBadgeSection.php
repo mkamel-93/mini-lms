@@ -8,15 +8,12 @@ use App\Models\Course;
 use App\Enums\StatusEnum;
 use Illuminate\View\View;
 use App\Core\BaseComponent;
+use Livewire\Attributes\Reactive;
 
 class CourseStatusBadgeSection extends BaseComponent
 {
+    #[Reactive]
     public ?Course $course = null;
-
-    public function mount(Course $course): void
-    {
-        $this->course = $course;
-    }
 
     public function getBadgeClasses(): string
     {
