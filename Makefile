@@ -99,3 +99,6 @@ test-phpstan: sync-env
 
 test-phpunit-coverage: sync-env
 	$(COMPOSE_CMD) exec -T --user www-data php sh -c 'COMPOSER=composer.script.json composer run-script test:phpunit-coverage'
+
+test-phpunit-coverage-project: sync-env
+	$(COMPOSE_CMD) exec -T --user www-data php sh -c 'COMPOSER=composer.script.json composer run-script test:phpunit-coverage-project'

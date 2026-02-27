@@ -102,6 +102,10 @@
             "echo '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'",
             "@php artisan test --parallel -c phpunit.xml --coverage --min=80 --testdox"
         ],
+        "test:phpunit-coverage-project": [
+            "echo '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'",
+            "@php artisan test --parallel -c phpunit.xml --coverage --min=80 --testdox --filter='CoursePolicy|LessonPolicy|LessonAccess|EnrollmentService|CourseEnrollmentSection'"
+        ],
         "test:dusk:all": [
             "echo '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'",
             "@php artisan dusk --configuration phpunit.dusk.xml --env=dusk --without-tty"

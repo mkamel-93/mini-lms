@@ -47,6 +47,7 @@ if [ -f "composer.json" ]; then
     su-exec www-data php /var/www/artisan storage:link --force
     su-exec www-data php /var/www/artisan optimize:clear
     su-exec www-data php /var/www/artisan key:generate
+    su-exec www-data php /var/www/artisan migrate --seed
 else
     echo "Notice: composer.json not found in /var/www. Skipping Composer tasks."
 fi

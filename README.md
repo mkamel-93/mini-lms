@@ -45,4 +45,9 @@ This single command:
 ## 📚 Documentation
 
 - **[Docker Setup](docs/docker.md)** — Container management & commands
-- **[Husky Git Hooks](docs/husky.md)** — Automated code quality checks
+- **[Husky Git Hooks](docs/husky/husky.md)** — Automated code quality checks
+- **[Features](docs/features.md)** — Core functionality overview
+- **[Architecture](docs/architecture.md)** — Design patterns & database schema
+- **[DataBase](docs/erd/database.md)** — Design patterns & database schema
+- **[Frontend](docs/frontend.md)** — UI components & behaviors
+- **[Testing](docs/testing.md)** — Testing strategy & tools

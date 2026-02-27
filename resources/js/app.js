@@ -3,6 +3,7 @@ import 'plyr/dist/plyr.css';
 import plyrSprite from '@/images/plyr.svg?url';
 import collapse from '@alpinejs/collapse';
 
+import.meta.glob(["@/images/**"]);
 
 // 1. Register Alpine plugins (Livewire 3 handles the start)
 document.addEventListener('alpine:init', () => {

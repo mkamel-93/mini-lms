@@ -2,13 +2,12 @@
 
 Husky runs automated checks on git actions.
 
-## Setup
+### Pre-Commit
+![1](pre-commit-1.png)
+![2](pre-commit-2.png)
 
-```bash
-npm run prepare
-```
-
-Runs automatically after `npm install`.
+### Pre-Push
+![1](pre-push.png)
 
 ## Mode Detection
 
