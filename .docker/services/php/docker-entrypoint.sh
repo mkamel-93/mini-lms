@@ -17,14 +17,12 @@ chown -R www-data:www-data /composer \
                            /var/run/php-fpm \
                            /var/www/public \
                            /var/www/storage \
-                           /var/www/storage/.dump \
                            /var/www/bootstrap \
                            /var/www/bootstrap/cache \
                            /var/www/vendor 2>/dev/null || true
 
 chmod -R 775 /composer \
              /var/www/storage \
-             /var/www/storage/.dump \
              /var/www/bootstrap/cache
 
 chmod 775 /var/run/php-fpm

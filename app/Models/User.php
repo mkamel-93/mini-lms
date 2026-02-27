@@ -10,6 +10,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Collection;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -33,7 +34,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property-read Collection<int, Course>      $courses
  * @property-read int|null                     $courses_count
  */
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory;
@@ -116,7 +117,6 @@ class User extends Authenticatable
     public function courses(): BelongsToMany
     {
         return $this->belongsToMany(Course::class, 'enrollments', 'user_id', 'course_id')
-            ->withTimestamps()
-            ->wherePivotNull('deleted_at');
+            ->withTimestamps();
     }
 }

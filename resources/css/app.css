@@ -64,3 +64,31 @@ select:focus[data-flux-control] {
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
+
+/* 1. Hide the raw video element BEFORE Plyr loads to prevent flicker */
+#video-player:not(.plyr__video-embed),
+.video-player:not(.plyr__video-embed) {
+    display: none;
+}
+
+/* 2. When Plyr is ready, ensure the nested video element is visible */
+.plyr--ready #video-player,
+.plyr--ready .video-player {
+    display: block !important;
+}
+
+/* 3. Ensure the container shows up */
+.plyr {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.plyr--ready {
+    opacity: 1 !important;
+}
+
+/* 4. Fix aspect ratio to prevent black bars */
+.plyr__video-wrapper {
+    aspect-ratio: 16 / 9;
+    background: #000;
+}

@@ -39,11 +39,34 @@
             </flux:sidebar.group>
         </flux:sidebar.nav>
 
+        <flux:sidebar.nav>
+            <flux:sidebar.group
+                class="grid"
+                :heading="__('View Website')"
+            >
+                <flux:sidebar.item
+                    icon="home"
+                    :href="route('home')"
+                    wire:navigate
+                >
+                    {{ __('List Courses') }}
+                </flux:sidebar.item>
+            </flux:sidebar.group>
+        </flux:sidebar.nav>
+
         <flux:spacer />
 
         <flux:sidebar.nav>
             <flux:sidebar.item
-                href="https://github.com/laravel/livewire-starter-kit"
+                href="https://www.linkedin.com/in/mostafakamel-93/"
+                icon="folder-git-2"
+                target="_blank"
+            >
+                {{ __('Linked-in') }}
+            </flux:sidebar.item>
+
+            <flux:sidebar.item
+                href="https://github.com/mkamel-93/mini-lms"
                 icon="folder-git-2"
                 target="_blank"
             >
@@ -51,11 +74,11 @@
             </flux:sidebar.item>
 
             <flux:sidebar.item
-                href="https://laravel.com/docs/starter-kits#livewire"
+                href="https://drive.google.com/drive/folders/1ABaBT5Fo2ulw_01Yvjfuk4H8mHHQVqid?usp=sharing"
                 icon="book-open-text"
                 target="_blank"
             >
-                {{ __('Documentation') }}
+                {{ __('Docs') }}
             </flux:sidebar.item>
         </flux:sidebar.nav>
 

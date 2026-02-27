@@ -52,4 +52,16 @@ class Enrollment extends BaseModel
     {
         return $this->belongsTo(Course::class);
     }
+
+    /**
+     * Bootstrap the model and its traits.
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::created(function (Enrollment $enrollment): void {
+            $enrollment->user->notify(new \App\Notifications\CourseEnrolledNotification($enrollment));
+        });
+    }
 }

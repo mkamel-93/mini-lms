@@ -19,7 +19,8 @@ export default defineConfig(({ mode }) => {
             include: [
                 'alpinejs',
                 'axios',
-                '@alpinejs/collapse'
+                '@alpinejs/collapse',
+                'plyr'
             ],
         },
         plugins: [
