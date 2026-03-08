@@ -21,6 +21,9 @@ chmod 664 /var/www/storage/logs/nginx-backend-error.log
 
 # --- 4. Node.js Build Pipeline ---
 if [ -f "package.json" ]; then
+    # This will not crash even if the file is already gone
+    rm -f /var/www/public/hot
+
     # Install dependencies only if the node_modules folder is missing
     if [ ! -d "/var/www/node_modules" ]; then
         echo "node_modules not found. Installing..."
